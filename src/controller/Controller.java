@@ -106,7 +106,7 @@ public class Controller {
     }
     
     public boolean registrasiUser(String name, String email, String password, int integerKategoriUser){
-        User user = new User(getLastIdUser(), name, email, password, integerKategoriUser);
+        User user = new User(getLastIdUser()+1, name, email, password, integerKategoriUser);
         conn.connect();
         String query = "INSERT INTO user VALUES(?,?,?,?,?)";
         try {
