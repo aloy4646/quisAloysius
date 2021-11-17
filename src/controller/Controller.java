@@ -9,8 +9,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import model.CategoryUser;
 import model.User;
 
 /**
@@ -18,43 +16,44 @@ import model.User;
  * @author Aloysius
  */
 public class Controller {
+
     DatabaseHandler conn = new DatabaseHandler();
-    
-//    public boolean cariPenduduk(String nik){
-//        boolean dapat = true;
-//        conn.connect();
-//        String query = "SELECT * FROM penduduk WHERE NIK='" + nik + "'";
-//        try {
-//            Statement stmt = conn.con.createStatement();
-//            ResultSet rs = stmt.executeQuery(query);
-//            if(rs.next() == false)
-//                dapat = false;
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        
-//        return dapat;
-//    }
-    
-    
-    public boolean loginUser(String email, String password){
+
+    public boolean loginUser(String email, String password) {
         boolean dapat = true;
         conn.connect();
         String query = "SELECT * FROM user WHERE email='" + email + "' AND password = '" + password + "'";
         try {
             Statement stmt = conn.con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
-            if(rs.next() == false)
+            if (rs.next() == false) {
                 dapat = false;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
+
         return dapat;
     }
-    
-    
-    public String[] getKategoriUser(){
+
+    public User getUser(String email, String password) {
+        User user = new User();
+        conn.connect();
+        String query = "SELECT * FROM user WHERE email='" + email + "' AND password = '" + password + "'";
+        try {
+            Statement stmt = conn.con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                user = new User(rs.getInt("id"), rs.getString("name"), rs.getString("email"), rs.getString("password"), rs.getInt("idCategory"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return user;
+    }
+
+    public String[] getKategoriUser() {
         String listKategori[] = new String[3];
         conn.connect();
         String query = "SELECT * FROM categoryuser";
@@ -69,11 +68,11 @@ public class Controller {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
+
         return listKategori;
     }
-    
-    public int getIdKategory(String name){
+
+    public int getIdKategory(String name) {
         int id = 0;
         conn.connect();
         String query = "SELECT * FROM categoryuser WHERE name='" + name + "'";
@@ -88,8 +87,8 @@ public class Controller {
         }
         return id;
     }
-    
-    public String getCategoryName(int id){
+
+    public String getCategoryName(int id) {
         String name = "";
         conn.connect();
         String query = "SELECT * FROM categoryuser WHERE id='" + id + "'";
@@ -104,8 +103,8 @@ public class Controller {
         }
         return name;
     }
-    
-    public int getLastIdUser(){
+
+    public int getLastIdUser() {
         int id = 0;
         conn.connect();
         String query = "SELECT * FROM user ORDER by id desc LIMIT 1";
@@ -120,9 +119,9 @@ public class Controller {
         }
         return id;
     }
-    
-    public boolean registrasiUser(String name, String email, String password, int integerKategoriUser){
-        User user = new User(getLastIdUser()+1, name, email, password, integerKategoriUser);
+
+    public boolean registrasiUser(String name, String email, String password, int integerKategoriUser) {
+        User user = new User(getLastIdUser() + 1, name, email, password, integerKategoriUser);
         conn.connect();
         String query = "INSERT INTO user VALUES(?,?,?,?,?)";
         try {
@@ -139,8 +138,8 @@ public class Controller {
             return (false);
         }
     }
-    
-    public void lihatDataBerdKategori(int integerKategoriUser){
+
+    public void lihatDataBerdKategori(int integerKategoriUser) {
         conn.connect();
         String query = "SELECT * FROM user WHERE idCategory='" + integerKategoriUser + "'";
         try {
@@ -160,8 +159,39 @@ public class Controller {
             e.printStackTrace();
         }
     }
-    
-    public void exitDatabase(){
+
+    public boolean updateUser(User user) {
+        conn.connect();
+        String query = "UPDATE user SET name='" + user.getName() + "', "
+                + "email='" + user.getEmail() + "', "
+                + "password='" + user.getPassword() + "', "
+                + "idCategory='" + user.getIntegerUserCategory() + "' "
+                + "WHERE id='" + user.getId() + "'";
+        try {
+            Statement stmt = conn.con.createStatement();
+            stmt.executeUpdate(query);
+            return (true);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return (false);
+        }
+    }
+
+    public boolean deleteUser(int id) {
+        conn.connect();
+
+        String query = "DELETE FROM user WHERE id='" + id + "'";
+        try {
+            Statement stmt = conn.con.createStatement();
+            stmt.executeUpdate(query);
+            return (true);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return (false);
+        }
+    }
+
+    public void exitDatabase() {
         conn.disconnect();
         System.out.println("Euy");
     }

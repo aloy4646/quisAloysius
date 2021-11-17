@@ -6,13 +6,11 @@
 package view;
 
 import controller.Controller;
-import controller.DateLabelFormatter;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import javax.swing.ComboBoxModel;
+import java.util.Arrays;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -21,13 +19,14 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import model.CategoryUser;
+import model.User;
 
 /**
  *
  * @author Aloysius
  */
 public class Menu {
+
     JFrame frameMainMenu = new JFrame(), frameLogin = new JFrame(), frameRegistrasi = new JFrame(), frameLihatData = new JFrame(), frameMenuPengguna = new JFrame();
     Controller controller = new Controller();
 
@@ -67,7 +66,7 @@ public class Menu {
         frameMainMenu.add(registrasi);
         frameMainMenu.add(lihatData);
     }
-    
+
     void createFrame() {
         frameMainMenu.setTitle("Menu");
         frameMainMenu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -100,16 +99,16 @@ public class Menu {
         frameLihatData.setVisible(false);
         frameLihatData.getContentPane().setBackground(new Color(175, 219, 227));
         windowClosingListener(frameLihatData);
-        
+
         frameMenuPengguna.setTitle("MENU PENGGUNA");
         frameMenuPengguna.setResizable(false);
-        frameMenuPengguna.setSize(300, 150);
+        frameMenuPengguna.setSize(350, 250);
         frameMenuPengguna.setLayout(null);
         frameMenuPengguna.setVisible(false);
-        frameMenuPengguna.getContentPane().setBackground(new Color(175, 219, 227));
+        frameMenuPengguna.getContentPane().setBackground(new Color(255, 112, 112));
         windowClosingListener(frameMenuPengguna);
     }
-    
+
     void windowClosingListener(JFrame frame) {
         frame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -119,20 +118,20 @@ public class Menu {
             }
         });
     }
-    
-    public void tampilanFrameLogin(){
+
+    public void tampilanFrameLogin() {
         frameLogin.getContentPane().removeAll();
         frameLogin.setVisible(true);
-        
+
         ImageIcon logo = new ImageIcon(new ImageIcon("C:\\Users\\Aloysius\\Documents\\ITHB\\Semester 3\\Prak PBO\\PBO\\Aloysius Quiz 2\\images\\logo.jpg").getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT));
         JLabel labelLogo = new JLabel(logo);
         labelLogo.setBounds(120, 5, 100, 100);
-        
+
         JLabel labelEmail = new JLabel("Email");
         labelEmail.setBounds(10, 105, 50, 30);
         JTextField textEmail = new JTextField();
         textEmail.setBounds(80, 108, 200, 20);
-        
+
         JLabel labelPassword = new JLabel("Password");
         labelPassword.setBounds(10, 140, 90, 30);
         JPasswordField textPassword = new JPasswordField();
@@ -152,61 +151,73 @@ public class Menu {
                 }
             }
         });
-        
+
+        JButton back = new JButton("BACK");
+        back.setBounds(120, 180, 100, 30);
+        back.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frameMainMenu.setVisible(true);
+                frameLogin.setVisible(false);
+            }
+        });
+
         frameLogin.add(labelLogo);
         frameLogin.add(labelEmail);
         frameLogin.add(textEmail);
         frameLogin.add(labelPassword);
         frameLogin.add(textPassword);
         frameLogin.add(login);
-        
+
     }
-    
-    public void tampilanFrameRegistrasi(){
+
+    public void tampilanFrameRegistrasi() {
         frameRegistrasi.getContentPane().removeAll();
         frameRegistrasi.setVisible(true);
-        
+
         JLabel labelName = new JLabel("Name");
         labelName.setBounds(10, 5, 50, 30);
         JTextField textName = new JTextField();
         textName.setBounds(80, 8, 200, 20);
-        
+
         JLabel labelEmail = new JLabel("Email");
         labelEmail.setBounds(10, 40, 50, 30);
         JTextField textEmail = new JTextField();
         textEmail.setBounds(80, 43, 200, 20);
-        
+
         JLabel labelPassword = new JLabel("Password");
         labelPassword.setBounds(10, 80, 90, 30);
         JPasswordField textPassword = new JPasswordField();
         textPassword.setBounds(80, 83, 200, 20);
-        
+
         JLabel labelKategori = new JLabel("Kategori");
         labelKategori.setBounds(10, 120, 200, 30);
         String[] listKategori = controller.getKategoriUser();
-        JComboBox comboKategori = new JComboBox(listKategori);
-        comboKategori.setBounds(120, 123, 150, 25);
-        
+        JComboBox comboCategory = new JComboBox(listKategori);
+        comboCategory.setBounds(120, 123, 150, 25);
+
         JButton registrasi = new JButton("REGISTRASI");
         registrasi.setBounds(10, 160, 120, 30);
         registrasi.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String stringPassword = String.valueOf(textPassword.getPassword());
-                if(stringPassword.length() < 8)
-                    JOptionPane.showMessageDialog(null, "Password harus lebih dari 8 karakter");
-                else{
-                    if(controller.registrasiUser(textName.getText(), textEmail.getText(), stringPassword, controller.getIdKategory(String.valueOf(comboKategori.getSelectedItem())))){
+                if (!textName.getText().isEmpty() && !textEmail.getText().isEmpty() && !Arrays.toString(textPassword.getPassword()).isEmpty() && comboCategory.getItemCount() != 0) {
+                    String stringPassword = String.valueOf(textPassword.getPassword());
+                    if (stringPassword.length() < 8) {
+                        JOptionPane.showMessageDialog(null, "Password harus lebih dari 8 karakter");
+                    } else if (controller.registrasiUser(textName.getText(), textEmail.getText(), stringPassword, controller.getIdKategory(String.valueOf(comboCategory.getSelectedItem())))) {
                         JOptionPane.showMessageDialog(null, "Registrasi berhasil");
                         frameRegistrasi.setVisible(false);
                         tampilanFrameMenuPengguna(textEmail.getText(), stringPassword);
-                    }else{
+                    } else {
                         JOptionPane.showMessageDialog(null, "Registrasi Gagal");
                     }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Data belum lengkap");
                 }
             }
         });
-        
+
         JButton back = new JButton("BACK");
         back.setBounds(150, 160, 100, 30);
         back.addActionListener(new ActionListener() {
@@ -216,8 +227,7 @@ public class Menu {
                 frameRegistrasi.setVisible(false);
             }
         });
-        
-        
+
         frameRegistrasi.add(labelName);
         frameRegistrasi.add(textName);
         frameRegistrasi.add(labelEmail);
@@ -225,21 +235,21 @@ public class Menu {
         frameRegistrasi.add(labelPassword);
         frameRegistrasi.add(textPassword);
         frameRegistrasi.add(labelKategori);
-        frameRegistrasi.add(comboKategori);
+        frameRegistrasi.add(comboCategory);
         frameRegistrasi.add(registrasi);
         frameRegistrasi.add(back);
     }
-    
-    public void tampilanFrameLihatData(){
+
+    public void tampilanFrameLihatData() {
         frameLihatData.getContentPane().removeAll();
         frameLihatData.setVisible(true);
-        
+
         JLabel labelKategori = new JLabel("Kategori");
         labelKategori.setBounds(10, 5, 200, 30);
         String[] listKategori = controller.getKategoriUser();
         JComboBox comboKategori = new JComboBox(listKategori);
         comboKategori.setBounds(120, 8, 150, 25);
-        
+
         JButton lihat = new JButton("LIHAT");
         lihat.setBounds(10, 40, 100, 30);
         lihat.addActionListener(new ActionListener() {
@@ -250,7 +260,7 @@ public class Menu {
                 frameLihatData.setVisible(false);
             }
         });
-        
+
         JButton back = new JButton("BACK");
         back.setBounds(130, 40, 100, 30);
         back.addActionListener(new ActionListener() {
@@ -260,19 +270,89 @@ public class Menu {
                 frameLihatData.setVisible(false);
             }
         });
-        
+
         frameLihatData.add(labelKategori);
         frameLihatData.add(comboKategori);
         frameLihatData.add(lihat);
         frameLihatData.add(back);
     }
-    
-    public void tampilanFrameMenuPengguna(String email, String password){
+
+    public void tampilanFrameMenuPengguna(String email, String password) {
         frameMenuPengguna.getContentPane().removeAll();
         frameMenuPengguna.setVisible(true);
-        
+        User user = controller.getUser(email, password);
+
+        JLabel labelName = new JLabel("Name");
+        labelName.setBounds(10, 5, 50, 30);
+        JTextField textName = new JTextField();
+        textName.setBounds(80, 8, 200, 20);
+        textName.setText(user.getName());
+
+        JLabel labelEmail = new JLabel("Email");
+        labelEmail.setBounds(10, 40, 50, 30);
+        JTextField textEmail = new JTextField();
+        textEmail.setBounds(80, 43, 200, 20);
+        textEmail.setText(email);
+
+        JLabel labelPassword = new JLabel("Password");
+        labelPassword.setBounds(10, 80, 90, 30);
+        JPasswordField textPassword = new JPasswordField();
+        textPassword.setBounds(80, 83, 200, 20);
+        textPassword.setText(password);
+
+        JLabel labelCategory = new JLabel("Kategori");
+        labelCategory.setBounds(10, 120, 200, 30);
+        String[] listKategori = controller.getKategoriUser();
+        JComboBox comboCategory = new JComboBox(listKategori);
+        comboCategory.setBounds(120, 123, 150, 25);
+        for (int i = 0; i < listKategori.length; i++) {
+            if (user.getIntegerUserCategory() - 1 == i) {
+                comboCategory.setSelectedIndex(i);
+            }
+        }
+
+        JButton simpan = new JButton("SIMPAN");
+        simpan.setBounds(10, 160, 100, 30);
+        simpan.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!textName.getText().isEmpty() && !textEmail.getText().isEmpty() && !Arrays.toString(textPassword.getPassword()).isEmpty() && comboCategory.getItemCount() != 0) {
+                    String stringPassword = String.valueOf(textPassword.getPassword());
+                    user.setName(textName.getText());
+                    user.setEmail(textEmail.getText());
+                    user.setPassword(stringPassword);
+                    user.setIntegerUserCategory(controller.getIdKategory(String.valueOf(comboCategory.getSelectedItem())));
+
+                    if (stringPassword.length() < 8) {
+                        JOptionPane.showMessageDialog(null, "Password harus lebih dari 8 karakter");
+                    } else if (controller.updateUser(user)) {
+                        JOptionPane.showMessageDialog(null, "Simpan berhasil");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Simpan Gagal");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Data belum lengkap");
+                }
+            }
+        });
+
+        JButton hapus = new JButton("HAPUS");
+        hapus.setBounds(120, 160, 100, 30);
+        hapus.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (controller.deleteUser(user.getId())) {
+                    JOptionPane.showMessageDialog(null, "Hapus berhasil");
+                    frameMenuPengguna.setVisible(false);
+                    frameMainMenu.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Hapus Gagal");
+                }
+            }
+        });
+
         JButton back = new JButton("BACK");
-        back.setBounds(10, 5, 100, 30);
+        back.setBounds(230, 160, 100, 30);
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -280,7 +360,17 @@ public class Menu {
                 frameMenuPengguna.setVisible(false);
             }
         });
-        
+
+        frameMenuPengguna.add(labelName);
+        frameMenuPengguna.add(textName);
+        frameMenuPengguna.add(labelEmail);
+        frameMenuPengguna.add(textEmail);
+        frameMenuPengguna.add(labelPassword);
+        frameMenuPengguna.add(textPassword);
+        frameMenuPengguna.add(labelCategory);
+        frameMenuPengguna.add(comboCategory);
+        frameMenuPengguna.add(simpan);
+        frameMenuPengguna.add(hapus);
         frameMenuPengguna.add(back);
     }
 }

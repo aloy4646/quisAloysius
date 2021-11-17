@@ -10,16 +10,17 @@ package model;
  * @author Aloysius
  */
 public class User {
+
     private int id;
     private String name;
     private String email;
     private String password;
     private int integerUserCategory;
-    
-    public User(){
-        
+
+    public User() {
+
     }
-    
+
     public User(int id, String name, String email, String password, int integerUserCategory) {
         this.id = id;
         this.name = name;
@@ -27,6 +28,7 @@ public class User {
         this.password = password;
         this.integerUserCategory = integerUserCategory;
     }
+
     public int getId() {
         return id;
     }
@@ -71,6 +73,5 @@ public class User {
     public String toString() {
         return "User{" + "id=" + id + ", name=" + name + ", email=" + email;
     }
-    
-    
+
 }

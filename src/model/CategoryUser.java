@@ -10,13 +10,14 @@ package model;
  * @author Aloysius
  */
 public class CategoryUser {
+
     private int id;
     private String name;
-    
-    public CategoryUser(){
-        
+
+    public CategoryUser() {
+
     }
-    
+
     public CategoryUser(int id, String name) {
         this.id = id;
         this.name = name;
@@ -37,6 +38,5 @@ public class CategoryUser {
     public void setName(String name) {
         this.name = name;
     }
-    
-    
+
 }
