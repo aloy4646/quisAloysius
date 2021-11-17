@@ -14,18 +14,18 @@ public class User {
     private String name;
     private String email;
     private String password;
-    private int integerKategoriUser;
+    private int integerUserCategory;
     
     public User(){
         
     }
     
-    public User(int id, String name, String email, String password, int categoryUser) {
+    public User(int id, String name, String email, String password, int integerUserCategory) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
-        this.integerKategoriUser = categoryUser;
+        this.integerUserCategory = integerUserCategory;
     }
     public int getId() {
         return id;
@@ -59,17 +59,17 @@ public class User {
         this.password = password;
     }
 
-    public int getIntegerKategoriUser() {
-        return integerKategoriUser;
+    public int getIntegerUserCategory() {
+        return integerUserCategory;
     }
 
-    public void setIntegerKategoriUser(int integerKategoriUser) {
-        this.integerKategoriUser = integerKategoriUser;
+    public void setIntegerUserCategory(int integerUserCategory) {
+        this.integerUserCategory = integerUserCategory;
     }
 
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", integerKategoriUser=" + integerKategoriUser + '}';
+        return "User{" + "id=" + id + ", name=" + name + ", email=" + email;
     }
     
     

@@ -89,6 +89,22 @@ public class Controller {
         return id;
     }
     
+    public String getCategoryName(int id){
+        String name = "";
+        conn.connect();
+        String query = "SELECT * FROM categoryuser WHERE id='" + id + "'";
+        try {
+            Statement stmt = conn.con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                name = rs.getString("name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return name;
+    }
+    
     public int getLastIdUser(){
         int id = 0;
         conn.connect();
@@ -115,7 +131,7 @@ public class Controller {
             stmt.setString(2, user.getName());
             stmt.setString(3, user.getEmail());
             stmt.setString(4, user.getPassword());
-            stmt.setInt(5, user.getIntegerKategoriUser());
+            stmt.setInt(5, user.getIntegerUserCategory());
             stmt.executeUpdate();
             return (true);
         } catch (SQLException e) {
@@ -130,14 +146,15 @@ public class Controller {
         try {
             Statement stmt = conn.con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
+            int counter = 1;
+            System.out.println(getCategoryName(integerKategoriUser));
             while (rs.next()) {
                 User user = new User();
                 user.setId(rs.getInt("id"));
                 user.setName(rs.getString("name"));
                 user.setEmail(rs.getString("email"));
-                user.setPassword(rs.getString("password"));
-                user.setIntegerKategoriUser(integerKategoriUser);
-                System.out.println(user.toString());
+                System.out.println(counter + ". " + user.toString() + '}');
+                counter++;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -148,128 +165,5 @@ public class Controller {
         conn.disconnect();
         System.out.println("Euy");
     }
-//    public IdentitasKTP getPenduduk (String nik) {
-//        conn.connect();
-//        String query = "SELECT * FROM penduduk WHERE NIK='" + nik + "'";
-//        IdentitasKTP identitas = new IdentitasKTP();
-//        try {
-//            Statement stmt = conn.con.createStatement();
-//            ResultSet rs = stmt.executeQuery(query);
-//            while (rs.next()) {
-//                identitas.setNik(rs.getString("NIK"));
-//                identitas.setNama(rs.getString("nama"));
-//                identitas.setTempatLahir(rs.getString("tempatLahir"));
-//                identitas.setJenisKelamin(rs.getString("jenisKelamin"));
-//                identitas.setGolDarah(rs.getString("golDarah"));
-//                identitas.setAlamat(rs.getString("alamat"));
-//                identitas.setRtRw(rs.getString("rtRw"));
-//                identitas.setKelDes(rs.getString("kelDes"));
-//                identitas.setKecamatan(rs.getString("kecamatan"));
-//                identitas.setAgama(rs.getString("agama"));
-//                identitas.setStatusKawin(rs.getString("statusKawin"));
-//                identitas.setPekerjaan(rs.getString("pekerjaan"));
-//                identitas.setKewarganegaraan(rs.getString("kewarganegaraan"));
-//                identitas.setKotaPembuatan(rs.getString("kotaPembuatan"));
-//                identitas.setAlamatFoto(rs.getString("alamatFoto"));
-//                identitas.setAlamatTandaTangan(rs.getString("alamatTandaTangan"));
-//                identitas.setTanggalLahir(rs.getDate("tanggalLahir"));
-//                identitas.setBerlakuHingga(rs.getDate("berlakuHingga"));
-//                identitas.setTanggalPembuatan(rs.getDate("tanggalPembuatan"));
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        
-//        return identitas;
-//    }
-//    
-//    public boolean insertPenduduk(IdentitasKTP identitas){
-//        conn.connect();
-//        String query = "INSERT INTO penduduk VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-//        try {
-//            PreparedStatement stmt = conn.con.prepareStatement(query);
-//            stmt.setString(1, identitas.getNik());
-//            stmt.setString(2, identitas.getNama());
-//            stmt.setString(3, identitas.getTempatLahir());
-//            stmt.setString(4, identitas.getJenisKelamin());
-//            stmt.setString(5, identitas.getGolDarah());
-//            stmt.setString(6, identitas.getAlamat());
-//            stmt.setString(7, identitas.getRtRw());
-//            stmt.setString(8, identitas.getKelDes());
-//            stmt.setString(9, identitas.getKecamatan());
-//            stmt.setString(10, identitas.getAgama());
-//            stmt.setString(11, identitas.getStatusKawin());
-//            stmt.setString(12, identitas.getPekerjaan());
-//            stmt.setString(13, identitas.getKewarganegaraan());
-//            stmt.setString(14, identitas.getKotaPembuatan());
-//            stmt.setString(15, identitas.getAlamatFoto());
-//            stmt.setString(16, identitas.getAlamatTandaTangan());
-//            stmt.setDate(17, convertDate(identitas.getTanggalLahir()));
-//            stmt.setDate(18, convertDate(identitas.getBerlakuHingga()));
-//            stmt.setDate(19, convertDate(identitas.getTanggalPembuatan()));
-//            stmt.executeUpdate();
-//            return (true);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            return (false);
-//        }
-//    }
-//    
-//    public boolean updateUser(IdentitasKTP identitas) {
-//        conn.connect();
-//        String query = "UPDATE penduduk SET nama='" + identitas.getNama() + "', "
-//                + "tempatLahir='" + identitas.getTempatLahir() + "', "
-//                + "golDarah='" + identitas.getGolDarah() + "', "
-//                + "alamat='" + identitas.getAlamat() + "', "
-//                + "rtRw='" + identitas.getRtRw() + "', "
-//                + "kelDes='" + identitas.getKelDes() + "', "
-//                + "kecamatan='" + identitas.getKecamatan() + "', "
-//                + "agama='" + identitas.getAgama() + "', "
-//                + "statusKawin='" + identitas.getStatusKawin() + "', "
-//                + "pekerjaan='" + identitas.getPekerjaan() + "', "
-//                + "kewarganegaraan='" + identitas.getKewarganegaraan() + "', "
-//                + "kotaPembuatan='" + identitas.getKotaPembuatan() + "', "
-//                + "alamatFoto='" + identitas.getAlamatFoto() + "', "
-//                + "alamatTandaTangan='" + identitas.getAlamatTandaTangan() + "', "
-//                + "tanggalLahir='" + convertDate(identitas.getTanggalLahir()) + "', "
-//                + "berlakuHingga='" + convertDate(identitas.getBerlakuHingga()) + "', "
-//                + "tanggalPembuatan='" + convertDate(identitas.getTanggalPembuatan()) + "' "
-//                + "WHERE NIK='" + identitas.getNik() + "'";
-//        try {
-//            Statement stmt = conn.con.createStatement();
-//            stmt.executeUpdate(query);
-//            return (true);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            return (false);
-//        }
-//    }
-//    
-//    public boolean deleteUser(String nik) {
-//        conn.connect();
-//        String query = "DELETE FROM penduduk WHERE NIK='" + nik + "'";
-//        try {
-//            Statement stmt = conn.con.createStatement();
-//            stmt.executeUpdate(query);
-//            return (true);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            return (false);
-//        }
-//    }
-//    
-//    private java.sql.Date convertDate(java.util.Date date){
-//        java.sql.Date convertedDate = new java.sql.Date(date.getTime());
-//        return convertedDate;
-//    }
-//    
-//    public boolean cekPekerjaan(String pekerjaanYangDicari, String pekerjaan){
-//        boolean cek = false;
-//        String[] pekerjaanSplit = pekerjaan.split(", ");
-//        for (String hasilSplit : pekerjaanSplit) {
-//            if(hasilSplit.equals(pekerjaanYangDicari))
-//                cek = true;
-//        }
-//        return cek;
-//    }
+
 }

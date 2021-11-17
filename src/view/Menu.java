@@ -8,6 +8,7 @@ package view;
 import controller.Controller;
 import controller.DateLabelFormatter;
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -86,7 +87,7 @@ public class Menu {
 
         frameRegistrasi.setTitle("REGISTRASI");
         frameRegistrasi.setResizable(false);
-        frameRegistrasi.setSize(600, 400);
+        frameRegistrasi.setSize(350, 250);
         frameRegistrasi.setLayout(null);
         frameRegistrasi.setVisible(false);
         frameRegistrasi.getContentPane().setBackground(new Color(175, 219, 227));
@@ -100,7 +101,7 @@ public class Menu {
         frameLihatData.getContentPane().setBackground(new Color(175, 219, 227));
         windowClosingListener(frameLihatData);
         
-        frameMenuPengguna.setTitle("LIHAT DATA");
+        frameMenuPengguna.setTitle("MENU PENGGUNA");
         frameMenuPengguna.setResizable(false);
         frameMenuPengguna.setSize(300, 150);
         frameMenuPengguna.setLayout(null);
@@ -123,9 +124,9 @@ public class Menu {
         frameLogin.getContentPane().removeAll();
         frameLogin.setVisible(true);
         
-        ImageIcon logo = new ImageIcon("C:\\Users\\Aloysius\\Documents\\ITHB\\Semester 3\\Prak PBO\\PBO\\Aloysius Quiz 2\\images\\logo.jpg");
+        ImageIcon logo = new ImageIcon(new ImageIcon("C:\\Users\\Aloysius\\Documents\\ITHB\\Semester 3\\Prak PBO\\PBO\\Aloysius Quiz 2\\images\\logo.jpg").getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT));
         JLabel labelLogo = new JLabel(logo);
-        labelLogo.setBounds(10, 5, 50, 50);
+        labelLogo.setBounds(120, 5, 100, 100);
         
         JLabel labelEmail = new JLabel("Email");
         labelEmail.setBounds(10, 105, 50, 30);
@@ -184,10 +185,10 @@ public class Menu {
         labelKategori.setBounds(10, 120, 200, 30);
         String[] listKategori = controller.getKategoriUser();
         JComboBox comboKategori = new JComboBox(listKategori);
-        comboKategori.setBounds(170, 123, 200, 25);
+        comboKategori.setBounds(120, 123, 150, 25);
         
         JButton registrasi = new JButton("REGISTRASI");
-        registrasi.setBounds(10, 160, 100, 30);
+        registrasi.setBounds(10, 160, 120, 30);
         registrasi.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -207,7 +208,7 @@ public class Menu {
         });
         
         JButton back = new JButton("BACK");
-        back.setBounds(130, 120, 100, 30);
+        back.setBounds(150, 160, 100, 30);
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -237,7 +238,7 @@ public class Menu {
         labelKategori.setBounds(10, 5, 200, 30);
         String[] listKategori = controller.getKategoriUser();
         JComboBox comboKategori = new JComboBox(listKategori);
-        comboKategori.setBounds(170, 8, 200, 25);
+        comboKategori.setBounds(120, 8, 150, 25);
         
         JButton lihat = new JButton("LIHAT");
         lihat.setBounds(10, 40, 100, 30);
