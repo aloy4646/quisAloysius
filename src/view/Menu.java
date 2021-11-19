@@ -58,6 +58,7 @@ public class Menu {
         lihatData.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                frameMainMenu.setVisible(false);
                 tampilanFrameLihatData();
             }
         });
